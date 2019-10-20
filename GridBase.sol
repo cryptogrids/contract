@@ -10,8 +10,9 @@ contract GridBase is Ownable, AccessControl {
 
     //using SafeMath for uint256;
 
-    uint levelUpFee = 0.00001 ether;
-    uint limitGridsEachtime = 100;
+    uint public levelUpFee = 0.01 ether;
+    uint public limitGridsEachtime = 100;
+    uint public discountGridsCount = 0;
 
     //uint fee;
 
