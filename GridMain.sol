@@ -10,7 +10,7 @@ contract GridMain is GridOwnership {
     using SafeMath32 for uint32;
     using SafeMath16 for uint16;
 
-    //uint16 public version = 100;
+    //uint16 public version = 101;
 
     function buyGird(uint16 _i, uint16 _j, uint16 _k, uint16 _l, address payable _inviter) external payable whenNotPaused {
         require(_i >= 1 && _i <= 100, "value invalid");
@@ -23,6 +23,9 @@ contract GridMain is GridOwnership {
         uint16 _y;
         //string memory position;
         uint16 position;
+        uint256 currentPrice = 0;
+        uint256 gridId = 0;
+        uint256 tempLevelUpFee = 0;
         address payable inviter;
 
         if(_inviter == address(0)){
@@ -37,8 +40,6 @@ contract GridMain is GridOwnership {
         //uint fee = msg.value;
         //address acc = msg.sender;
 
-        uint256  currentPrice = 0;
-        uint256  gridId = 0;
         for(_x = _i; _x<=_k; _x++){
             for(_y = _j; _y<=_l; _y++){
                 //position = strConcat(uint2str(_x),uint2str(_y));
@@ -67,11 +68,24 @@ contract GridMain is GridOwnership {
                 }else{
                     //uint16 id = arr_struct_grid.push(structGird(_x, _y, 1)) - 1;
                     //mappingGirdPositionToOwner[position] = msg.sender;
-                    currentPrice += levelUpFee;
+                    //tempLevelUpFee = levelUpFee;
+                    if(discountGridsCount < 1000){
+                        //currentPrice += levelUpFee;
+                    }else if(discountGridsCount < 3000){
+                        tempLevelUpFee = levelUpFee*1/10;
+                    }else if(discountGridsCount < 6000){
+                        tempLevelUpFee = levelUpFee*3/10;
+                    }else if(discountGridsCount < 10000){
+                        tempLevelUpFee = levelUpFee*6/10;
+                    }else{
+                        tempLevelUpFee = levelUpFee;
+                    }
+                    discountGridsCount = discountGridsCount.add(1);
+                    currentPrice += tempLevelUpFee;
                     uint id = arr_struct_grid.push(structGird(_x, _y, 1, msg.sender, inviter));
                     mappingPositionToGirdId[position] = id;
                     mappingOwnerGridCount[msg.sender] = mappingOwnerGridCount[msg.sender].add(1);
-                    owner.transfer(levelUpFee);
+                    owner.transfer(tempLevelUpFee);
                 }
             }
         }
@@ -132,7 +146,8 @@ contract GridMain is GridOwnership {
         //address acc = msg.sender;
 
         uint256 currentPrice = 0;
-        uint gridId = 0;
+        uint256 gridId = 0;
+        uint256 tempLevelUpFee = 0;
         for(_x = _i; _x<=_k; _x++){
             for(_y = _j; _y<=_l; _y++){
                 //position = strConcat(uint2str(_x),uint2str(_y));
@@ -149,7 +164,20 @@ contract GridMain is GridOwnership {
                 }else{
                     //uint16 id = arr_struct_grid.push(structGird(_x, _y, 1)) - 1;
                     //mappingGirdPositionToOwner[position] = msg.sender;
-                    currentPrice += levelUpFee;
+                    if(discountGridsCount < 1000){
+                        //currentPrice += levelUpFee;
+                    }else if(discountGridsCount < 3000){
+                        tempLevelUpFee = levelUpFee*1/10;
+                    }else if(discountGridsCount < 6000){
+                        tempLevelUpFee = levelUpFee*3/10;
+                    }else if(discountGridsCount < 10000){
+                        tempLevelUpFee = levelUpFee*6/10;
+                    }else{
+                        tempLevelUpFee = levelUpFee;
+                    }
+                    //discountGridsCount = discountGridsCount.add(1);
+                    currentPrice += tempLevelUpFee;
+                    //currentPrice += levelUpFee;
                 }
             }
         }
