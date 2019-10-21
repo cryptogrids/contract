@@ -47,7 +47,7 @@ contract GridMain is GridOwnership {
                 position = (_x-1)*100+_y;
                 gridId = mappingPositionToGirdId[position];
                 if(gridId > 0){
-                    structGird memory _grid = arr_struct_grid[gridId-1];
+                    structGird storage _grid = arr_struct_grid[gridId-1];
                     //if(_grid.level > 0){
                         //uint16 id = arr_struct_grid.push(structGird(_x, _y, 1)) - 1;
                         //mappingPositionToOwner[position] = msg.sender;
